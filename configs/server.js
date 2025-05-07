@@ -6,7 +6,6 @@ import helmet from "helmet";
 import morgan from "morgan";
 import { dbConnection } from "./mongo.js";
 import authRoutes from "../src/auth/auth.routes.js";
-import userRoutes from "../src/user/user.routes.js";
 import publicationRoutes from "../src/publication/publication.routes.js";
 import commentRoutes from "../src/comment/comment.routes.js";
 import apiLimiter from "../src/middlewares/rate-limit-validator.js";
@@ -22,10 +21,9 @@ const middlewares = (app) => {
 };
 
 const routes = (app) => {
-    app.use("/opinionmanager/v1/auth", authRoutes);
-    app.use("/opinionmanager/v1/user", userRoutes);
-    app.use("/opinionmanager/v1/publication", publicationRoutes);
-    app.use("/opinionmanager/v1/comment", commentRoutes); 
+    app.use("/blog/v1/auth", authRoutes);
+    app.use("/blog/v1/publication", publicationRoutes);
+    app.use("/blog/v1/comment", commentRoutes); 
 
     app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs))
 };

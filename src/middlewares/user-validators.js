@@ -31,21 +31,7 @@ export const loginValidator = [
     handleErrors
 ];
 
-export const updatePasswordValidator = [
-    param("uid").isMongoId().withMessage("No es un ID válido de MongoDB"),
-    param("uid").custom(userExists),
-    body("newPassword").isLength({ min: 8 }).withMessage("El password debe contener al menos 8 caracteres"),
-    body("oldPassword").notEmpty().isLength({ min: 8 }).withMessage("El password debe contener al menos 8 caracteres"),
-    validarCampos,
-    handleErrors
-];
 
-export const updateUserValidator = [
-    param("uid", "No es un ID válido").isMongoId(),
-    param("uid").custom(userExists),
-    validarCampos,
-    handleErrors
-];
 
 
 

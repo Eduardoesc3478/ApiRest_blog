@@ -79,35 +79,7 @@ export const getPublications = async (req, res) => {
     }
 };
 
-   export const updatePublication = async (req, res) => {
-    try {
-        const { id } = req.params;  
-        const data = req.body;      
 
-        
-        const updatedPublication = await Publication.findByIdAndUpdate(id, data, { new: true });
-
-       
-        if (!updatedPublication) {
-            return res.status(404).json({
-                success: false,
-                msg: "Publicación no encontrada",
-            });
-        }
-
-        res.status(200).json({
-            success: true,
-            msg: "Publicación actualizada correctamente",
-            publication: updatedPublication,
-        });
-    } catch (err) {
-        res.status(500).json({
-            success: false,
-            msg: "Error al actualizar la publicación",
-            error: err.message,
-        });
-    }
-};
 
 export const deletePublication = async (req, res) => {
     try {
