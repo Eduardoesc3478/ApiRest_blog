@@ -40,38 +40,6 @@ export const addComment = async (req, res) => {
     }
 };
 
-export const getComments = async (req, res) => {
-    try {
-        const { postId } = req.body; 
-
-        
-        if (!postId) {
-            return res.status(400).json({
-                success: false,
-                message: 'Falta el ID del post'
-            });
-        }
-
-        
-        const comments = await Comment.find({ postId })
-            .populate('user', 'name surname username email phone') 
-            .populate('post', 'title content') 
-            .sort({ createdAt: -1 }); 
-
-        
-        res.status(200).json({
-            success: true,
-            comments
-        });
-    } catch (error) {
-        
-        res.status(500).json({
-            success: false,
-            message: 'Error al obtener los comentarios',
-            error: error.message
-        });
-    }
-};
 
 export const getAllComments = async (req, res) => {
     try {
