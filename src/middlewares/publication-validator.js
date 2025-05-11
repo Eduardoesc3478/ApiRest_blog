@@ -3,11 +3,11 @@ import { publicationExists,  } from "../helpers/db-validators.js";
 import { validarCampos } from "./validate-fields.js";
 import { deleteFileOnError } from "./delete-file-on-error.js";
 import { handleErrors } from "./handle-errors.js";
-import { validateJWT } from "./validate-jwt.js";
+
 
 
 export const addPublicationValidator = [
-    validateJWT,
+    
     body("title").notEmpty().withMessage("El título es requerido"),
     body("title").isLength({ max: 60}).withMessage("El título no puede exceder los 25 caracteres"),
     body("text").notEmpty().withMessage("El contenido de la publicación es requerido"),
@@ -19,24 +19,10 @@ export const addPublicationValidator = [
 ];
 
 
-export const updatePublicationValidator = [
-    validateJWT,  
-     
-    param("id").isMongoId().withMessage("No es un ID válido de MongoDB"),
-    param("id").custom(publicationExists),
-    body("title").notEmpty().withMessage("El título es requerido"),
-    body("title").isLength({ max: 25 }).withMessage("El título no puede exceder los 25 caracteres"),
-    body("text").notEmpty().withMessage("El texto es requerido"),
-    body("text").isLength({ max: 100 }).withMessage("El texto no puede exceder los 100 caracteres"),
-    body("class").notEmpty().withMessage("La clase es requerida"),
-
-    validarCampos,
-    handleErrors
-];
 
 
-export const deletePublicationValidator = [
-    validateJWT,
+
+export const getPublicationByIdValidator = [
     
     param("id").isMongoId().withMessage("No es un ID válido de MongoDB"),
     param("id").custom(publicationExists),

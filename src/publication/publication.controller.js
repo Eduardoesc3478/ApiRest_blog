@@ -79,12 +79,9 @@ export const getPublications = async (req, res) => {
     }
 };
 
-
-
-export const deletePublication = async (req, res) => {
+export const getPublicationById = async (req, res) => {
     try {
         const { id } = req.params;
-
 
         const publication = await Publication.findById(id);
         if (!publication) {
@@ -94,17 +91,16 @@ export const deletePublication = async (req, res) => {
             });
         }
 
-        await Publication.findByIdAndDelete(id);
-
         res.status(200).json({
             success: true,
-            message: 'Publicación eliminada exitosamente',
+            publication
         });
     } catch (error) {
         res.status(500).json({
             success: false,
-            message: 'Error al eliminar la publicación',
-            error: error.message,
+            message: 'Error al obtener la publicación',
+            error: error.message
         });
     }
-};
+}
+

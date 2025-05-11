@@ -2,78 +2,97 @@ import Comment from "./comment.model.js";
 
 export const addComment = async (req, res) => {
     try {
-        const { content, post } = req.body; 
-        const user = req.usuario; 
+        const { content, postId, userName  } = req.body; 
+         
 
-        if (!user) {
-            return res.status(401).json({
+        
+
+        
+        if (!content || !postId || !userName) {
+            return res.status(400).json({
                 success: false,
-                message: 'Usuario no autenticado'
+                message: 'Faltan datos requeridos (content o postId)'
             });
         }
 
         
         const comment = new Comment({
             content,
-            post,
-            user: user._id 
+            postId,
+            userName,
         });
 
+        
         await comment.save();
 
+        
         res.status(200).json({
             success: true,
             comment
         });
     } catch (error) {
+        
         res.status(500).json({
             success: false,
             message: 'Error al guardar el comentario',
             error: error.message
         });
     }
-}
+};
 
-export const updateComment = async (req, res) => {
-    try{
-        const { cid } = req.body;
-        const { data } = req.body
+export const getComments = async (req, res) => {
+    try {
+        const { postId } = req.body; 
 
-        const comment = await Comment.findById(cid);
+        
+        if (!postId) {
+            return res.status(400).json({
+                success: false,
+                message: 'Falta el ID del post'
+            });
+        }
 
-        comment.content = data;
-        await comment.save();
+        
+        const comments = await Comment.find({ postId })
+            .populate('user', 'name surname username email phone') 
+            .populate('post', 'title content') 
+            .sort({ createdAt: -1 }); 
 
+        
         res.status(200).json({
             success: true,
-            message: 'Update Comment',
-            comment,
-        })
-    }catch(error){
-        return res.status(500).json({
+            comments
+        });
+    } catch (error) {
+        
+        res.status(500).json({
             success: false,
-            message: 'Error updating comment',
+            message: 'Error al obtener los comentarios',
             error: error.message
-        })
+        });
     }
 };
 
-export const deleteComment = async (req, res) => {
+export const getAllComments = async (req, res) => {
     try {
-        const { cid } = req.params;
-    
-
-        await Comment.findByIdAndDelete(cid);
+        const comments = await Comment.find()
+            .populate('userName', 'name surname username email phone') 
+            .populate({
+                path: 'postId', 
+                select: 'title' 
+            })
+            .sort({ createdAt: -1 }); 
 
         res.status(200).json({
             success: true,
-            message: "Comentario eliminado exitosamente"
+            comments
         });
     } catch (error) {
         res.status(500).json({
             success: false,
-            message: "Error al eliminar el comentario",
+            message: 'Error al obtener todos los comentarios',
             error: error.message
         });
     }
 };
+
